@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>API in HTML</title>
+    </head>
+    <body>
+        <h1>Bored API</h1>
+        <div id="bored-api" class="bored-api"></div>
+        <h1>Zippopotam API</h1>
+        <div id="zipcode-api" class="zipcode-api">
+            <label for="zipcode">Zipcode</label>
+            <input id="zipcode" name="zipcode" type="text" />
+            <br />
+            <button onclick="getZipCodeDetails();">Get Zip Code Details</button>
+            <br />
+            <div id="zipcode-details"></div>
+        </div>
+    </body>
+    <script>
+        fetch("https://www.boredapi.com/api/activity")
+            .then((response) => response.json())
+            .then((data) => {
+                let bitcoinDOM = document.getElementById("bored-api");
+                bitcoinDOM.innerHTML = `
+                <table>
+                    <tr>
+                        <td>Activity </td>
+                        <td>: ${data.activity}</td>
+                    </tr>
+                    <tr>
+                        <td>Price </td>
+                        <td>: ${data.price}</td>
+                    </tr>
+                    <tr>
+                        <td>Type </td>
+                        <td>: ${data.type}</td>
+                    </tr>
+                    <tr>
+                        <td>Link </td>
+                        <td>: ${data.link}</td>
+                    </tr>
+                    <tr>
+                        <td>Participants </td>
+                        <td>: ${data.participants}</td>
+                    </tr>
+                </table>`;
+            })
+            .catch((e) => console.log(e));
+
+        function getZipCodeDetails() {
+            fetch(
+                "https://api.zippopotam.us/in/" +
+                    document.getElementById("zipcode").value
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    let zipcodeDetails =
+                        document.getElementById("zipcode-details");
+                    zipcodeDetails.innerHTML = `
+                    <table>
+                    <tr>
+                        <td>Country </td>
+                        <td>: ${data.country}</td>
+                    </tr>
+                    <tr>
+                        <td>State </td>
+                        <td>: ${data.places[0].state}</td>
+                    </tr>
+                    <tr>
+                        <td>Place Name </td>
+                        <td>: ${data.places[0]["place name"]}</td>
+                    </tr>
+                    <tr>
+                        <td>Latitude </td>
+                        <td>: ${data.places[0].latitude}</td>
+                    </tr>
+                    <tr>
+                        <td>Longitude </td>
+                        <td>: ${data.places[0].longitude}</td>
+                    </tr>
+                </table>`;
+                })
+                .catch((e) => console.log(e));
+        }
+    </script>
+</html>
